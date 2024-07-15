@@ -1,4 +1,4 @@
- pub(crate) struct Pager {
+pub(crate) struct Pager {
     width: u16,
     height: u16,
     lnum: u16,
@@ -11,23 +11,18 @@ impl Pager {
             width,
             height,
             lnum: 0,
-            lines
+            lines,
         }
     }
 
     pub fn move_to_line(&mut self, line: u16) -> u16 {
-        let mut new = line;
-        if line < 0 {
-            new = 0;
-        } else if line >= self.height {
-            new = self.height - 1;
+        if line >= self.height {
+            self.lnum = self.height - 1;
         } else {
-            new = line;
+            self.lnum = line;
         }
 
-        self.lnum = new;
-
-        new
+        self.lnum
     }
 
     pub fn resize(&mut self, width: u16, height: u16) {

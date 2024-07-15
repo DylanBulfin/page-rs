@@ -1,9 +1,7 @@
 use crate::{input::process_input, types::Pager};
-use std::{io::{stdout, Result, Write}, time::Duration};
+use std::io::{stdout, Result, Write};
 
-use crossterm::{
-    cursor, event::read, queue, terminal::{self, enable_raw_mode}
-};
+use crossterm::{cursor, event::read, queue, terminal};
 
 pub fn draw_text(pager: &Pager) -> Result<()> {
     let mut stdout = stdout();
@@ -21,11 +19,11 @@ pub fn draw_text(pager: &Pager) -> Result<()> {
         print!("{}", pager.lines[ln as usize]);
         queue!(stdout, cursor::MoveToNextLine(1))?;
     }
-    
+
     stdout.flush()
 }
 
-pub fn start(pager: &mut Pager) -> Result<()>{
+pub fn start(pager: &mut Pager) -> Result<()> {
     loop {
         if process_input(read()?, pager)? {
             draw_text(pager)?;

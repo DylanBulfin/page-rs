@@ -1,4 +1,4 @@
-use crate::{pager, types::Pager};
+use crate::types::Pager;
 
 // bool in return indicates whether a redraw is necessary
 

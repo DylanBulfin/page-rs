@@ -2,7 +2,7 @@ mod pager;
 mod types;
 mod input;
 mod commands;
-use std::io::{stdin, BufRead, Read, Result};
+use std::io::{stdin, BufRead, Result};
 
 use crossterm::terminal::{self, disable_raw_mode, enable_raw_mode};
 use types::Pager;
