@@ -8,7 +8,7 @@ use std::{
 };
 
 use crossterm::terminal::{self, disable_raw_mode, enable_raw_mode};
-use types::Pager;
+use types::State;
 
 fn read_stdin() -> Result<Vec<String>> {
     let stdin = stdin().lock();
@@ -25,9 +25,9 @@ fn main() -> Result<()> {
     enable_raw_mode()?;
 
     let (width, height) = terminal::size()?;
-    let mut pager = Pager::new(width, height, lines);
+    let mut state = State::new(width, height, lines);
 
-    pager::start(&mut pager)?;
+    pager::start(&mut state)?;
 
     disable_raw_mode()
 }
