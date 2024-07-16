@@ -1,8 +1,11 @@
+mod commands;
+mod input;
 mod pager;
 mod types;
-mod input;
-mod commands;
-use std::io::{stdin, BufRead, Result};
+use std::{
+    io::{stdin, BufRead, Result},
+    panic,
+};
 
 use crossterm::terminal::{self, disable_raw_mode, enable_raw_mode};
 use types::Pager;
@@ -12,7 +15,11 @@ fn read_stdin() -> Result<Vec<String>> {
     stdin.lines().collect()
 }
 
-fn main() ->Result<()>{
+fn main() -> Result<()> {
+    panic::set_hook(Box::new(|s| {
+        println!("{}", s);
+        disable_raw_mode().unwrap();
+    }));
     let lines = read_stdin()?;
 
     enable_raw_mode()?;
@@ -22,7 +29,5 @@ fn main() ->Result<()>{
 
     pager::start(&mut pager)?;
 
-    disable_raw_mode()?;
-        
-    loop{}
+    disable_raw_mode()
 }
