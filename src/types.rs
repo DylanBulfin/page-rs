@@ -44,8 +44,12 @@ impl State {
         self.width = width;
     }
 
-    pub fn set_search_term(&mut self, term: &String) -> bool {
+    pub fn set_search_term(&mut self, term: &str) -> bool {
         self.search_str = String::from(term);
+
+        if term.len() == 0 {
+            return false;
+        }
 
         self.match_list = self
             .lines
@@ -102,10 +106,6 @@ impl State {
         //Unable to find a match later in file, go to first match in file
         self.lnum = self.match_list[self.match_list.len() - 1];
         true
-    }
-
-    pub fn has_match(&self, lnum: u16) -> bool {
-        self.match_list.contains(&lnum)
     }
 
     pub fn print_styled_line(&self, line: &str, lnum: u16) {

@@ -23,6 +23,14 @@ pub fn process_input(event: Event, state: &mut State) -> Result<Action> {
 fn process_key_event(event: KeyEvent, state: &mut State) -> Result<Action> {
     match event.code {
         KeyCode::Char(c) => process_char_key(c, event.modifiers, state),
+        KeyCode::Esc => {
+            if state.get_search_term().len() != 0 {
+                state.set_search_term("");
+                Ok(Action::Redraw)
+            } else {
+                Ok(Action::Exit)
+            }
+        }
         _ => Ok(Action::None),
     }
 }
