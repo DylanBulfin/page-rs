@@ -12,7 +12,7 @@
     #   nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
     # in
     {
-      homeManagerModules = rec {
+      nixosModules = rec {
         page-rs = import ./nix;
         default = page-rs;
       };
