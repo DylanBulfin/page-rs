@@ -1,5 +1,7 @@
 use crossterm::style::Stylize;
 
+use crate::commands::{initialize_commands, Command};
+
 pub(crate) struct State {
     width: u16,
     height: u16,
@@ -7,11 +9,15 @@ pub(crate) struct State {
     cnum: u16,
     search_str: String,
     match_list: Vec<u16>,
+    pub(crate) commands: Vec<Command>,
     pub(crate) lines: Vec<String>,
 }
 
 impl State {
     pub fn new(width: u16, height: u16, lines: Vec<String>) -> Self {
+        let mut commands = Vec::new();
+        initialize_commands(&mut commands).expect("Failed to initialize commands");
+
         State {
             width,
             height,
@@ -19,6 +25,7 @@ impl State {
             cnum: 0,
             search_str: String::new(),
             match_list: Vec::new(),
+            commands,
             lines,
         }
     }
@@ -110,12 +117,16 @@ impl State {
 
     pub fn print_styled_line(&self, line: &str, lnum: u16) {
         if !self.match_list.contains(&lnum) {
-            print!("{}",line)
+            print!("{}", line)
         } else {
             let (p1, p2) = line.split_once(&self.search_str).unwrap();
             let styled_term = String::from(&self.search_str).on_cyan();
             print!("{}{}{}", p1, styled_term, p2)
         }
+    }
+
+    pub fn get_command(&self, c: char) -> Option<fn(&mut State) -> Action> {
+        Some(self.commands.iter().find(|cmd| cmd.key() == c)?.func)
     }
 
     pub fn line(&self) -> u16 {

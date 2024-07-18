@@ -70,7 +70,7 @@ fn search_mode(state: &mut State) -> Result<()> {
     let mut search_term = String::new();
 
     loop {
-        match process_search_input(read()?, state)? {
+        match process_search_input(read()?)? {
             crate::types::SearchAction::Write(c) => {
                 search_term.push(c);
                 print!("{}", c);
