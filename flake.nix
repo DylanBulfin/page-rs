@@ -12,7 +12,12 @@
     #   nixpkgsFor = forAllSystems (system: import nixpkgs { inherit system; });
     # in
     {
-      overlays.default = final: prev:
+      homeManagerModules = rec {
+        page-rs = import ./nix;
+        default = page-rs;
+      };
+
+      overlays.default = (final: prev:
         with final;
         {
           page-rs = pkgs.rustPlatform.buildRustPackage {
@@ -24,7 +29,6 @@
               lockFile = ./Cargo.lock;
             };
           };
-        };
-
+        });
     };
 }
