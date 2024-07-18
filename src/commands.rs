@@ -24,7 +24,7 @@ fn get_key(name: &str, default: char, table: &Map<String, Value>) -> Result<char
 
     if table.contains_key(name) {
         if let Value::String(c) = &table[name] {
-            key = c.chars().next().ok_or(())?;
+            key = c.chars().next().expect("Unable to read config");
         }
     }
 
@@ -32,7 +32,14 @@ fn get_key(name: &str, default: char, table: &Map<String, Value>) -> Result<char
 }
 
 pub fn initialize_commands(commands: &mut Vec<Command>) -> Result<(), ()> {
-    let path = Path::new("~/.config/page-rs/config.toml");
+    let path = format!(
+        "{}/.config/page-rs/config.toml",
+        home::home_dir()
+            .expect("Unable to determine home directory")
+            .to_str()
+            .expect("Unable to process home directory")
+    );
+    let path = Path::new(&path);
     let mut table = Map::new();
 
     if path.exists() {
@@ -44,13 +51,22 @@ pub fn initialize_commands(commands: &mut Vec<Command>) -> Result<(), ()> {
 
     commands.push(Command::new(get_key("move_down", 'n', &table)?, move_down));
     commands.push(Command::new(get_key("move_up", 'e', &table)?, move_up));
-    commands.push(Command::new(get_key("move_right", 'i', &table)?, move_right));
+    commands.push(Command::new(
+        get_key("move_right", 'i', &table)?,
+        move_right,
+    ));
     commands.push(Command::new(get_key("move_left", 'm', &table)?, move_left));
     commands.push(Command::new(get_key("exit", 'q', &table)?, exit));
     commands.push(Command::new(get_key("search", '/', &table)?, search));
-    commands.push(Command::new(get_key("next_match", 'k', &table)?, next_match));
-    commands.push(Command::new(get_key("prev_match", 'K', &table)?, prev_match));
-    
+    commands.push(Command::new(
+        get_key("next_match", 'k', &table)?,
+        next_match,
+    ));
+    commands.push(Command::new(
+        get_key("prev_match", 'K', &table)?,
+        prev_match,
+    ));
+
     Ok(())
 }
 
