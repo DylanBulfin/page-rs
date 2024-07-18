@@ -2,55 +2,55 @@
 I've never managed to get `bat` or `less` to feel good, so this is my attempt at a simple pager in rust.
 
 ## Features
-- Fully configurable keybindings (probably want to change defaults)
+- Fully configurable keybindings (you probably want to change defaults)
 - Basic left/down/up/right navigation
 - Vim-style searching
 
 ## Installation
-- Non-NixOS: `cargo install --path .`
-- On NixOS, with flakes enabled and home-manager as a NixOS module, add the following to your `flake.nix`;
+### Non-NixOS 
+`cargo install --path .`
+
+### NixOS
+- On NixOS, with flakes enabled and home-manager as a NixOS module, make the following changes to your `flake.nix`;
 ```
 # Add page-rs as flake input
-inputs.page-rs.url = "gitub:DylanBulfin/page-rs"
+inputs.page-rs.url = "gitub:DylanBulfin/page-rs";
 
-# Apply the below overlay however
+# Apply the below overlay (more info: https://nixos.wiki/wiki/Overlays)
 page-rs.overlays.default
 
-# Add the following options to your output section
-outputs = { self, nixpkgs, page-rs, ... }@inputs: {
-    nixosConfigurations.my-nixos = nixpkgs.lib.nixosSystem {
-      system = "x86_64-linux";
-      modules = [
-        # Other modules
-
-        home-manager.nixosModules.home-manager 
-        {
-          home-manager = {
-            # Other options
-
-            sharedModules = [ page-rs.nixosModules.default ];
-          };
-        };
-      ];
-    };
-  };
+# Add the below as a home-manager module
+page-rs.nixosModules.default
 ```
+- [Example for last step](https://github.com/DylanBulfin/nixos/blob/aff703b2df820fca7b82ea873a776cc75e220bc6/flake.nix#L32)
 - Finally, add the following to your `home.nix`
+```
+programs.page-rs.enable = true;
 
-## Configuration
+# If you want to change default bindings
+programs.page-rs.settings = 
+{
+    move_left = "m";
+    move_down = "n";
+    ...
+};
+```
+
+## Configuration 
 - Looks for a file at `~/.config/page-rs/config.toml`, path currently can't be changed
 - Example of config below, with all values set to the default value:
 ```
-move_left = "m";
-move_down = "n";
-move_up = "e";
-move_right = "i";
-exit = "q";
-search = "/";
-next_match = "k";
-prev_match = "K";
+move_left = "m"
+move_down = "n"
+move_up = "e"
+move_right = "i"
+exit = "q"
+search = "/"
+next_match = "k"
+prev_match = "K"
 ```
 - Should support any valid rust `char` assuming you have a keyboard to enter it
+- Same options are supported for Nix modul settings
 
 ## TODO
 - If called without stdin it will hang until you type some lines
