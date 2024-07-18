@@ -1,9 +1,25 @@
 # page-rs
-I've yet to find a pager that fits my specific wants (I use Colemak-DH so I want `mnei` as basic nav keys, and normal vim bindings for basically everything else)
+I've never managed to get `bat` or `less` to feel good, so this is my attempt at a simple pager in rust.
 
 ## Features
-- Read from stdin, allow simple navigation via `mnei`
-- Supports vim-style `/` searching, `kK` to go between matches (since `n` is taken)
+- Fully configurable keybindings (probably want to change defaults)
+- Basic left/down/up/right navigation
+- Vim-style searching
+
+## Configuration
+- Looks for a file at `~/.config/page-rs/config.toml`, path currently can't be changed
+- Example of config below, with all values set to the default value:
+```
+move_left = "m";
+move_down = "n";
+move_up = "e";
+move_right = "i";
+exit = "q";
+search = "/";
+next_match = "k";
+prev_match = "K";
+```
+- Should support any valid rust `char` assuming you have a keyboard to enter it
 
 ## TODO
 - If called without stdin it will hang until you type some lines
