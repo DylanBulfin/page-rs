@@ -43,15 +43,8 @@ in {
   config = mkIf cfg.enable {
     home.packages = [ cfg.package ];
 
-    xdg.configFile."alacritty/alacritty.toml" = lib.mkIf (cfg.settings != { }) {
-      source = (tomlFormat.generate "alacritty.toml" cfg.settings).overrideAttrs
-        (finalAttrs: prevAttrs: {
-          buildCommand = lib.concatStringsSep "\n" [
-            prevAttrs.buildCommand
-            # TODO: why is this needed? Is there a better way to retain escape sequences?
-            "substituteInPlace $out --replace '\\\\' '\\'"
-          ];
-        });
+    xdg.configFile."page-rs/config.toml" = lib.mkIf (cfg.settings != { }) {
+      source = tomlFormat.generate "config.toml" cfg.settings;
     };
   };
 }
