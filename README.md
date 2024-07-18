@@ -13,8 +13,11 @@ I've never managed to get `bat` or `less` to feel good, so this is my attempt at
 # Add page-rs as flake input
 inputs.page-rs.url = "gitub:DylanBulfin/page-rs"
 
-# Add the following options to your home-manager module configuration
-outputs = { self, nixpkgs, ... }@inputs: {
+# Apply the below overlay however
+page-rs.overlays.default
+
+# Add the following options to your output section
+outputs = { self, nixpkgs, page-rs, ... }@inputs: {
     nixosConfigurations.my-nixos = nixpkgs.lib.nixosSystem {
       system = "x86_64-linux";
       modules = [
@@ -32,6 +35,7 @@ outputs = { self, nixpkgs, ... }@inputs: {
     };
   };
 ```
+- Finally, add the following to your `home.nix`
 
 ## Configuration
 - Looks for a file at `~/.config/page-rs/config.toml`, path currently can't be changed
