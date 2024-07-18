@@ -6,6 +6,33 @@ I've never managed to get `bat` or `less` to feel good, so this is my attempt at
 - Basic left/down/up/right navigation
 - Vim-style searching
 
+## Installation
+- Non-NixOS: `cargo install --path .`
+- On NixOS, with flakes enabled and home-manager as a NixOS module, add the following to your `flake.nix`;
+```
+# Add page-rs as flake input
+inputs.page-rs.url = "gitub:DylanBulfin/page-rs"
+
+# Add the following options to your home-manager module configuration
+outputs = { self, nixpkgs, ... }@inputs: {
+    nixosConfigurations.my-nixos = nixpkgs.lib.nixosSystem {
+      system = "x86_64-linux";
+      modules = [
+        # Other modules
+
+        home-manager.nixosModules.home-manager 
+        {
+          home-manager = {
+            # Other options
+
+            sharedModules = [ page-rs.nixosModules.default ];
+          };
+        };
+      ];
+    };
+  };
+```
+
 ## Configuration
 - Looks for a file at `~/.config/page-rs/config.toml`, path currently can't be changed
 - Example of config below, with all values set to the default value:
