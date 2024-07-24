@@ -1,5 +1,5 @@
 {
-  description = "THE MIMBLEWIMBLE BLOCKCHAIN.";
+  description = "Simple pager in rust";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/release-24.05";

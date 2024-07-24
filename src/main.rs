@@ -20,6 +20,7 @@ fn main() -> Result<()> {
         println!("{}", s);
         disable_raw_mode().unwrap();
     }));
+    
     let lines = read_stdin()?;
 
     enable_raw_mode()?;
