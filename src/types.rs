@@ -31,8 +31,8 @@ impl State {
     }
 
     pub fn move_to_line(&mut self, line: u16) -> u16 {
-        if line >= self.height {
-            self.lnum = self.height - 1;
+        if line >= self.lines.len() as u16 {
+            self.lnum = self.lines.len() as u16 - 1;
         } else {
             self.lnum = line;
         }
